@@ -1,0 +1,69 @@
+/* src/components/PlanTrip/TripTypeSelection.css */
+
+.trip-options {
+  display: flex;
+  justify-content: space-between; /* Distributes space evenly */
+  margin: 20px 0;
+}
+
+.trip-option {
+  flex: 1;
+  padding: 15px;
+  margin: 0 10px; /* Space between options */
+  border: 2px solid transparent; /* Transparent border for effect */
+  border-radius: 8px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: #555; /* Neutral text color */
+  background-color: rgba(247, 249, 252, 0.9); /* Light background for options with slight transparency */
+  transition: all 0.3s ease; /* Smooth transition for hover effect */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+.trip-option.selected {
+  border-color: #007bff; /* Highlight selected option */
+  background-color: rgba(231, 240, 255, 0.9); /* Light blue background for selected with transparency */
+  color: #003d99; /* Darker text color for contrast */
+}
+
+.trip-option:hover {
+  border-color: #007bff; /* Highlight border on hover */
+  background-color: rgba(224, 231, 255, 0.9); /* Slightly darker background on hover */
+}
+
+.num-members-container {
+  margin-top: 20px; /* Space above the number of members input */
+}
+
+.num-members-container label {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #333; /* Darker label color for visibility */
+}
+
+.num-members-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: border-color 0.3s ease; /* Smooth transition for focus */
+}
+
+.num-members-input:focus {
+  border-color: #007bff; /* Change border color on focus */
+  outline: none; /* Remove default outline */
+}
+
+/* Add the background image to the main container */
+.trip-selection-container {
+  background-image: url('../public/fam.jpg'); /* Update the path to your background image */
+  background-size: cover; /* Cover the entire container */
+  background-position: center; /* Center the image */
+  padding: 20px; /* Add some padding around the content */
+  border-radius: 10px; /* Rounded corners for the container */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}

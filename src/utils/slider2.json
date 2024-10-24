@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Valley of flowers, Utarakhand",
+    "price": "47,043",
+    "detail": "Experience the stunning beauty of Flower Valley in Himachal Pradesh, a vibrant paradise filled with diverse flora and breathtaking landscapes.",
+    "image": "./val.jpg"
+  },
+  {
+    "name": "SpitiValley,Himachal pradesh",
+    "price": "66,353",
+    "detail": "Discover the enchanting Spiti Valley in Himachal Pradesh, where rugged mountains, ancient monasteries, and breathtaking landscapes create a unique and unforgettable experience.",
+    "image": "./spi.jpg"
+  },
+  {
+    "name": "Jaislmer,Rajasthan",
+    "price": "35,853",
+    "detail": "Explore the magical city of Jaisalmer, Rajasthan, known for its stunning golden sandstone architecture, vibrant culture, and the mesmerizing Thar Desert.",
+    "image": "./jai.jpg"
+  },
+  {
+    "name": "Ziro,Arunachal Pradesh",
+    "price": "47,043",
+    "detail": "Experience the serene beauty of Ziro in Arunachal Pradesh, a picturesque valley renowned for its lush green landscapes, vibrant Apatani culture, and stunning rice fields.",
+    "image": "./ziro.jpg"
+  },
+  {
+    "name": "Ooty, Tamil Nadu ",
+    "price": "66,353",
+    "detail": "Discover the charming hill station of Ooty, Tamil Nadu, famous for its scenic landscapes, lush tea gardens, and cool climate, perfect for a tranquil getaway.",
+    "image": "./ooty.jpg"
+  },
+  {
+    "name": "lakshadweep",
+    "price": "35,853",
+    "detail": "Immerse yourself in the stunning paradise of Lakshadweep, where crystal-clear waters, pristine beaches, and vibrant coral reefs offer an idyllic escape for beach lovers and adventurers alike.",
+    "image": "./lak.jpg"
+  }
+]

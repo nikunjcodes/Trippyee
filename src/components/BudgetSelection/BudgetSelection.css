@@ -1,0 +1,55 @@
+/* src/components/PlanTrip/PlanTrip.css */
+
+.budget-options {
+  display: flex; /* Use flexbox for alignment */
+  justify-content: space-around; /* Space options evenly */
+  margin: 20px 0; /* Space above and below the budget options */
+}
+
+.budget-option {
+  flex: 1; /* Each option takes equal space */
+  padding: 15px; /* Space inside each option */
+  margin: 0 10px; /* Space between options */
+  border: 2px solid transparent; /* Border for hover effect */
+  border-radius: 8px; /* Rounded corners */
+  text-align: center; /* Center text */
+  font-size: 16px; /* Font size */
+  font-weight: 600; /* Bold text */
+  color: #555; /* Text color */
+  background-color: #f7f9fc; /* Light background for options */
+  transition: all 0.3s ease; /* Smooth transition for hover effect */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+.budget-option.selected {
+  border-color: #007bff; /* Highlight selected option */
+  background-color: #e7f0ff; /* Light blue background for selected */
+  color: #003d99; /* Darker text color for contrast */
+}
+
+.budget-option:hover {
+  border-color: #007bff; /* Highlight border on hover */
+  background-color: #e0e7ff; /* Slightly darker background on hover */
+}
+
+/* Plan Trip Button Styles */
+.plan-trip-button {
+  margin-top: 20px; /* Margin to separate from budget options */
+  padding: 12px 25px; /* Padding for the button */
+  background-color: #007bff; /* Button background color */
+  color: white; /* Text color */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor */
+  transition: background-color 0.3s ease; /* Smooth background transition */
+  font-size: 18px; /* Font size for button text */
+  text-align: center; /* Center the text */
+}
+
+.plan-trip-button:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+}
+
+.plan-trip-button:focus {
+  outline: none; /* Remove default outline */
+}

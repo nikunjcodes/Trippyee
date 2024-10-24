@@ -1,0 +1,384 @@
+
+  body {
+    margin: 0;
+    padding: 0;
+    overflow-y: auto; /* Allows vertical scrolling */
+    font-family: Arial, sans-serif; /* Basic font style */
+    height: 100vh; /* Full viewport height */
+    background-color: #f0f4f8; /* Light background color for the body */
+    display: flex; /* Use flexbox for vertical alignment */
+    flex-direction: column; /* Stack children vertically */
+    
+  }
+
+  .app-container {
+    display: flex; /* Flexbox for layout */
+    flex-direction: column; /* Stack elements vertically */
+    height: 100%; /* Full height of viewport */
+    overflow-y: auto; /* Enable vertical scrolling */
+    
+  }
+
+  .plan-trip-container {
+    padding: 30px; /* Padding for the main container */
+    max-width: 900px; /* Increased max width to 900px */
+    margin: 40px auto; /* Center the container with margin */
+    background-color: #ffffff; /* White background for content area */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    flex: 1; /* Allow this container to grow and fill space */
+    overflow-y: auto; /* Enable scrolling inside the container */
+   
+    
+  }
+
+  h2 {
+    color: #333; /* Heading color */
+    margin: 20px 0 10px; /* Margin around headings */
+    font-size: 24px; /* Font size for headings */
+    font-weight: 600; /* Bold headings */
+  }
+
+  .subtitle {
+    color: #666; /* Subtitle color */
+    margin-bottom: 20px; /* Space below subtitle */
+    font-size: 16px; /* Font size for subtitles */
+  }
+
+  .calendar-container {
+    display: flex; /* Flexbox for calendars */
+    justify-content: space-between; /* Space calendars evenly */
+    margin-bottom: 30px; /* Space below calendar */
+    width: 100%; /* Full width */
+  }
+
+  .calendar {
+    flex: 1; /* Each calendar takes equal space */
+    margin: 0 10px; /* Space between calendars */
+    background-color: #e7f0ff; /* Light background for calendars */
+    border-radius: 8px; /* Rounded corners */
+    padding: 15px; /* Inner padding for calendars */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+    
+  }
+
+  .calendar label {
+    display: block; /* Label as block */
+    margin-bottom: 5px; /* Margin below label */
+    font-weight: bold; /* Bold labels */
+    color: #333; /* Dark color for labels */
+    
+  }
+
+  .trip-options {
+    display: flex; /* Flexbox for trip types */
+    justify-content: space-between; /* Space trip types evenly */
+    margin-bottom: 30px; /* Space below trip type */
+  }
+
+  .trip-option {
+    flex: 1; /* Each option takes equal space */
+    padding: 15px; /* Space inside each option */
+    margin: 0 10px; /* Space between options */
+    border: 2px solid transparent; /* Border for hover effect */
+    border-radius: 8px; /* Rounded corners */
+    text-align: center; /* Center text */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Pointer cursor */
+    transition: all 0.3s ease; /* Smooth transition for hover effect */
+    background-color: #e7f0ff; /* Light background for options */
+  }
+
+  .trip-option.selected {
+    border-color: #20C997; /* Highlight selected option */
+    background-color: #b8d8f5; /* Slightly darker background for selected */
+  }
+
+  .num-members-container {
+    margin: 20px 0; /* Space above and below */
+  }
+
+  .num-members-input {
+    width: 100%; /* Full width input */
+    padding: 10px; /* Padding for input */
+    border-radius: 5px; /* Rounded corners */
+    border: 1px solid #ccc; /* Light border */
+  }
+
+  .budget-options {
+    display: flex; /* Flexbox for budget options */
+    justify-content: space-between; /* Space options evenly */
+    margin-bottom: 30px; /* Space below budget options */
+  }
+
+  .budget-option {
+    flex: 1; /* Each option takes equal space */
+    padding: 15px; /* Space inside each option */
+    margin: 0 10px; /* Space between options */
+    border: 2px solid transparent; /* Border for hover effect */
+    border-radius: 8px; /* Rounded corners */
+    text-align: center; /* Center text */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Pointer cursor */
+    transition: all 0.3s ease; /* Smooth transition for hover effect */
+    background-color: #f7f9fc; /* Light background for options */
+  }
+
+  .budget-option.selected {
+    border-color:#20C997; /* Highlight selected option */
+    background-color: #b8d8f5; /* Light blue background for selected */
+  }
+
+  .budget-option:hover {
+    border-color: #20C997; /* Highlight border on hover */
+    background-color: #e0e7ff; /* Slightly darker background on hover */
+  }
+
+  .submit-button {
+    padding: 12px 25px; /* Padding for the button */
+    background-color: #20C997; /* Button background color */
+    color: white; /* Text color */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor */
+    transition: background-color 0.3s ease; /* Smooth background transition */
+    font-size: 18px; /* Font size for button text */
+    text-align: center; /* Center the text */
+    margin-top: 20px; /* Margin above button */
+    width: 100%; /* Full width button */
+  }
+
+  .submit-button:hover {
+    background-color: #20C997; /* Darker shade on hover */
+  }
+
+  .submit-button:focus {
+    outline: none; /* Remove default outline */
+  }
+
+  /* Modal styles (if you have a modal component) */
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000; /* Ensure modal is above all content */
+  }
+
+  .modal-content {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 90%; /* Responsive width */
+  }
+
+  .modal-close {
+    background: #20C997;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 20px;
+  }
+
+  .modal-close:hover {
+    background: #20C997; /* Darker shade on hover */
+  }
+
+
+  body {
+    margin: 0;
+    padding: 0;
+    overflow-y: auto; /* Allows vertical scrolling */
+    font-family: Arial, sans-serif; /* Basic font style */
+    height: 100vh; /* Full viewport height */
+    background-color: #f0f4f8; /* Light background color for the body */
+    display: flex; /* Use flexbox for vertical alignment */
+    flex-direction: column; /* Stack children vertically */
+  }
+
+  .app-container {
+    display: flex; /* Flexbox for layout */
+    flex-direction: column; /* Stack elements vertically */
+    height: 100%; /* Full height of viewport */
+    overflow-y: auto; /* Enable vertical scrolling */
+  }
+
+  .plan-trip-container {
+    padding: 30px; /* Padding for the main container */
+    max-width: 1350px; /* Increased max width to 900px */
+    margin: 40px auto; /* Center the container with margin */
+    background-color: #ffffff; /* White background for content area */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    flex: 1; /* Allow this container to grow and fill space */
+    overflow-y: auto; /* Enable scrolling inside the container */
+  }
+
+  h2 {
+    color: #333; /* Heading color */
+    margin: 20px 0 10px; /* Margin around headings */
+    font-size: 24px; /* Font size for headings */
+    font-weight: 600; /* Bold headings */
+  }
+
+  .subtitle {
+    color: #666; /* Subtitle color */
+    margin-bottom: 20px; /* Space below subtitle */
+    font-size: 16px; /* Font size for subtitles */
+  }
+
+  .calendar-container {
+    display: flex; /* Flexbox for calendars */
+    justify-content: space-between; /* Space calendars evenly */
+    margin-bottom: 30px; /* Space below calendar */
+    width: 100%; /* Full width */
+  }
+
+  .calendar {
+    flex: 1; /* Each calendar takes equal space */
+    margin: 0 10px; /* Space between calendars */
+    background-color: #e7f0ff; /* Light background for calendars */
+    border-radius: 8px; /* Rounded corners */
+    padding: 15px; /* Inner padding for calendars */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+  }
+
+  .calendar label {
+    display: block; /* Label as block */
+    margin-bottom: 5px; /* Margin below label */
+    font-weight: bold; /* Bold labels */
+    color: black; /* Dark color for labels */
+  }
+
+  .trip-options {
+    display: flex; /* Flexbox for trip types */
+    justify-content: space-between; /* Space trip types evenly */
+    margin-bottom: 30px; /* Space below trip type */
+  }
+
+  .trip-option {
+    flex: 1; /* Each option takes equal space */
+    padding: 15px; /* Space inside each option */
+    margin: 0 10px; /* Space between options */
+    border: 2px solid transparent; /* Border for hover effect */
+    border-radius: 8px; /* Rounded corners */
+    text-align: center; /* Center text */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Pointer cursor */
+    transition: all 0.3s ease; /* Smooth transition for hover effect */
+    background-color: #e7f0ff; /* Light background for options */
+  }
+
+  .trip-option.selected {
+    border-color: #20C997; /* Highlight selected option */
+    background-color: #b8d8f5; /* Slightly darker background for selected */
+  }
+
+  .num-members-container {
+    margin: 20px 0; /* Space above and below */
+  }
+
+  .num-members-input {
+    width: 100%; /* Full width input */
+    padding: 10px; /* Padding for input */
+    border-radius: 5px; /* Rounded corners */
+    border: 1px solid #ccc; /* Light border */
+  }
+
+  .budget-options {
+    display: flex; /* Flexbox for budget options */
+    justify-content: space-between; /* Space options evenly */
+    margin-bottom: 30px; /* Space below budget options */
+  }
+
+  .budget-option {
+    flex: 1; /* Each option takes equal space */
+    padding: 15px; /* Space inside each option */
+    margin: 0 10px; /* Space between options */
+    border: 2px solid transparent; /* Border for hover effect */
+    border-radius: 8px; /* Rounded corners */
+    text-align: center; /* Center text */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Pointer cursor */
+    transition: all 0.3s ease; /* Smooth transition for hover effect */
+    background-color: #f7f9fc; /* Light background for options */
+  }
+
+  .budget-option.selected {
+    border-color: #20C997; /* Highlight selected option */
+    background-color: #b8d8f5; /* Light blue background for selected */
+  }
+
+  .budget-option:hover {
+    border-color: #20C997; /* Highlight border on hover */
+    background-color: #e0e7ff; /* Slightly darker background on hover */
+  }
+
+  .submit-button {
+    padding: 12px 25px; /* Padding for the button */
+    background-color: #20C997; /* Button background color */
+    color: white; /* Text color */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor */
+    transition: background-color 0.3s ease; /* Smooth background transition */
+    font-size: 18px; /* Font size for button text */
+    text-align: center; /* Center the text */
+    margin-top: 20px; /* Margin above button */
+    width: 100%; /* Full width button */
+  }
+
+  .submit-button:hover {
+    background-color: #20C997; /* Darker shade on hover */
+  }
+
+  .submit-button:focus {
+    outline: none; /* Remove default outline */
+  }
+
+  /* Modal styles (if you have a modal component) */
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000; /* Ensure modal is above all content */
+  }
+
+  .modal-content {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 90%; /* Responsive width */
+  }
+
+  .modal-close {
+    background: #20C997;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 20px;
+  }
+
+  .modal-close:hover {
+    background: #20C997; /* Darker shade on hover */
+  }
+

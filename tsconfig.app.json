@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",  // "react" for older versions of React
+    "module": "ESNext",
+    "target": "ES6",
+    "lib": ["dom", "esnext"],
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["src/**/*"]
+}

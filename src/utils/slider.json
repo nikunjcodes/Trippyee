@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Top Experiences",
+    "price": "47,043",
+    "detail": "Discover the most unforgettable travel experiences of 2024! From hidden gems to iconic landmarks, these must-see destinations offer adventure.",
+    "image": "./Top Adventures.jpg"
+  },
+  {
+    "name": "Top Attractions",
+    "price": "66,353",
+    "detail": "Explore the top attractions of 2024, where history, nature, and culture come together. From iconic landmarks to breathtaking natural wonders, these sites are a must-visit for every traveler.",
+    "image": "./resizeWater.jpg"
+  },
+  {
+    "name": "Bucket List",
+    "price": "35,853",
+    "detail": "Check off your ultimate travel bucket list with these once-in-a-lifetime experiences. From thrilling adventures to awe-inspiring destinations, these unforgettable moments await you in 2024.",
+    "image": "./resize.jpeg"
+  },
+  {
+    "name": "Cultural & Historic",
+    "price": "47,043",
+    "detail": "Explore the cultural and historic places of this country from Varansi ghats to Rameshwaram",
+    "image": "./banaras.jpg"
+  },
+  {
+    "name": "Iconic Landscape",
+    "price": "66,353",
+    "detail": "Discover breathtaking iconic landscapes that showcase the natural beauty and wonders of the world.",
+    "image": "./iconic.jpg"
+  },
+  {
+    "name": "Thrilling Adventure",
+    "price": "35,853",
+    "detail": "Embark on thrilling adventures that will push your limits and ignite your sense of excitement.",
+    "image": "./thril.jpg"
+  }
+]

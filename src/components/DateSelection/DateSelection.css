@@ -1,0 +1,94 @@
+/* DateSelection.css */
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-image: url('your-background-image.jpg'); /* Replace with your image path */
+  background-size: cover; /* Ensure the background covers the entire viewport */
+  background-position: center; /* Center the background image */
+}
+
+.calendar-container {
+  display: flex; /* Use flexbox to arrange calendars side by side */
+  justify-content: space-between; /* Space the calendars evenly */
+  margin: 20px; /* Margin around the container */
+}
+
+.calendar {
+  flex: 1; /* Each calendar takes equal space */
+  margin: 0 10px; /* Space between calendars */
+  padding: 20px; /* Inner padding for calendars */
+  background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white background */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+  transition: transform 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.calendar:hover {
+  transform: scale(1.02); /* Slightly enlarge the calendar on hover */
+}
+
+.calendar label {
+  display: block; /* Label as block */
+  margin-bottom: 10px; /* Margin below label */
+  font-weight: bold; /* Bold labels */
+  color: #333; /* Dark color for text */
+}
+
+.custom-calendar {
+  width: 100%; /* Full width for better responsiveness */
+  border: 1px solid #ccc; /* Border around the calendar */
+  border-radius: 4px; /* Rounded corners for input */
+  padding: 10px; /* Inner padding for calendar */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+/* Styling for the DatePicker's calendar pop-up */
+.react-datepicker {
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+}
+
+/* Additional styles for the days in the calendar */
+.react-datepicker__day {
+  line-height: 2.5; /* Increase the height of each day */
+  font-size: 16px; /* Font size for days */
+}
+
+.react-datepicker__day:hover {
+  background-color: rgba(0, 123, 255, 0.2); /* Highlight on hover */
+  border-radius: 50%; /* Circular highlight */
+}
+
+.react-datepicker__day--selected {
+  background-color: #007bff; /* Background for selected day */
+  color: white; /* Text color for selected day */
+  border-radius: 50%; /* Circular shape for selected day */
+}
+
+.react-datepicker__header {
+  background-color: #007bff; /* Header background */
+  color: white; /* Header text color */
+  border-top-left-radius: 8px; /* Rounded corners */
+  border-top-right-radius: 8px; /* Rounded corners */
+}
+
+.react-datepicker__month {
+  padding: 10px; /* Padding around the month */
+}
+
+.react-datepicker__current-month {
+  font-size: 1.5em; /* Larger font size for current month */
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+  .calendar-container {
+    flex-direction: column; /* Stack calendars vertically on small screens */
+  }
+  
+  .calendar {
+    margin-bottom: 20px; /* Space below each calendar */
+  }
+}

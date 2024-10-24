@@ -1,0 +1,71 @@
+/* Styles for the search results container */
+.search-results {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #f9f9f9;
+  }
+  
+  /* Header for the search results page */
+  .search-results h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+  }
+  
+  /* Styles for each individual property card */
+  .property-card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  /* Hover effect for property cards */
+  .property-card:hover {
+    transform: scale(1.02);
+  }
+  
+  /* Property card title */
+  .property-card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #007bff;
+  }
+  
+  /* Property card details (location, price, etc.) */
+  .property-card p {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 8px;
+  }
+  
+  /* Styling for the price */
+  .property-card p span.price {
+    font-weight: bold;
+    color: #28a745;
+  }
+  
+  /* Responsive design for smaller screens */
+  @media (max-width: 768px) {
+    .search-results {
+      padding: 15px;
+    }
+  
+    .property-card {
+      padding: 15px;
+    }
+  
+    .property-card h2 {
+      font-size: 1.25rem;
+    }
+  
+    .property-card p {
+      font-size: 0.9rem;
+    }
+  }
+  
