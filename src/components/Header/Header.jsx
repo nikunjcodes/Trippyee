@@ -4,7 +4,7 @@ import { BiMenuAltRight } from "react-icons/bi";
 import { getMenuStyles } from "../../utils/common";
 import useHeaderColor from "../../hooks/useHeaderColor";
 import OutsideClickHandler from "react-outside-click-handler";
-
+import {Link} from "react-router-dom";
 const Header = () => {
   const [menuOpened, setMenuOpened] = useState(false);
   const headerColor = useHeaderColor();
@@ -13,8 +13,9 @@ const Header = () => {
     <section className="h-wrapper" style={{ background: headerColor }}>
       <div className="flexCenter innerWidth paddings h-container">
         {/* logo */}
+        <Link to="/">
         <img src="./logo-removebg-preview.png" alt="logo" width={100} />
-
+        </Link>
         {/* menu */}
         <OutsideClickHandler
           onOutsideClick={() => {

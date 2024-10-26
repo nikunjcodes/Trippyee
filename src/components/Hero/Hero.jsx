@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { HiLocationMarker } from "react-icons/hi";
 import CountUp from "react-countup";
-import { color, motion } from "framer-motion";
+import { color, motion, px } from "framer-motion";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import './Hero.css';
@@ -60,10 +60,10 @@ const Hero = () => {
     value={query}
     onChange={(e) => setQuery(e.target.value)}
     placeholder="Enter location you want to visit"
-    style={{ color: "black" }}
+    style={{ color: "black", width: "250px" }}
+    
   />
 
-  {/* Render suggestions */}
   {suggestions.length > 0 && (
     <ul className="suggestions-list" style={{color: "GrayText"}}>
       {suggestions.map((suggestion, index) => (

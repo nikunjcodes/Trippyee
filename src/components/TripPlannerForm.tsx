@@ -1,20 +1,13 @@
-"use client"
+import React, { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { CalendarIcon, Users, User, Users2, Home, IndianRupee } from "lucide-react"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
-import { useState } from "react"
-import { Button } from "../src/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../src/components/ui/card"
-import { Input } from "../src/components/ui/input"
-import { Label } from "../src/components/ui/label"
-import { CalendarIcon, Users, User, Users2, Home, IndianRupee, Plus, Minus } from "lucide-react"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "../src/components/ui/dialog"
-
-export default function App1() {
+const TripPlannerForm: React.FC = () => {
   const [startDate, setStartDate] = useState("")
   const [endDate, setEndDate] = useState("")
   const [tripType, setTripType] = useState("")
@@ -22,6 +15,7 @@ export default function App1() {
   const [budget, setBudget] = useState("")
   const [showModal, setShowModal] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
+  const navigate = useNavigate()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -29,19 +23,25 @@ export default function App1() {
       setErrorMessage("Please fill in all the details before submitting.")
       setShowModal(true)
     } else {
-      console.log({ startDate, endDate, tripType, members, budget })
-      alert("Trip plan submitted!")
+      const tripDuration = Math.ceil((new Date(endDate).getTime() - new Date(startDate).getTime()) / (1000 * 3600 * 24))
+      navigate("/matching-cities", { 
+        state: { 
+          startDate, 
+          endDate, 
+          tripType, 
+          members, 
+          budget,
+          tripDuration 
+        } 
+      })
     }
   }
-
-  const incrementMembers = () => setMembers((prev) => prev + 1)
-  const decrementMembers = () => setMembers((prev) => (prev > 2 ? prev - 1 : 2))
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-100 to-blue-100 flex items-center justify-center p-4">
       <Card className="w-full max-w-4xl shadow-xl bg-white">
         <CardHeader className="bg-green-600 text-white rounded-t-lg">
-            <CardTitle className="text-3xl font-bold text-center">Plan Your Dream Trip</CardTitle>
+          <CardTitle className="text-3xl font-bold text-center">Plan Your Dream Trip</CardTitle>
           <CardDescription className="text-green-100 text-lg text-center">
             Fill in the details to start your adventure
           </CardDescription>
@@ -116,21 +116,19 @@ export default function App1() {
                   <Button
                     type="button"
                     variant="outline"
-                    size="icon"
-                    onClick={decrementMembers}
+                    onClick={() => setMembers(prev => (prev > 2 ? prev - 1 : 2))}
                     className="border-green-300 text-green-600 hover:bg-green-50 w-12 h-12"
                   >
-                    <Minus className="w-6 h-6" />
+                    -
                   </Button>
                   <span className="text-3xl font-bold text-green-700">{members}</span>
                   <Button
                     type="button"
                     variant="outline"
-                    size="icon"
-                    onClick={incrementMembers}
+                    onClick={() => setMembers(prev => prev + 1)}
                     className="border-green-300 text-green-600 hover:bg-green-50 w-12 h-12"
                   >
-                    <Plus className="w-6 h-6" />
+                    +
                   </Button>
                 </div>
               </div>
@@ -182,9 +180,11 @@ export default function App1() {
             <DialogTitle>Incomplete Details</DialogTitle>
             <DialogDescription>{errorMessage}</DialogDescription>
           </DialogHeader>
-          <Button onClick={() => setShowModal(false)} style={{backgroundColor: "black"}}>Close</Button>
+          <Button onClick={() => setShowModal(false)} className="bg-green-600 hover:bg-green-700">Close</Button>
         </DialogContent>
       </Dialog>
     </div>
   )
 }
+
+export default TripPlannerForm

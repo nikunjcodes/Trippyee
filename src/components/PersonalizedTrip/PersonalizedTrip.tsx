@@ -1,20 +1,20 @@
-"use client"
+'use client'
 
 import { useState } from "react"
-import { Button } from "../src/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../src/components/ui/card"
-import { Input } from "../src/components/ui/input"
-import { Label } from "../src/components/ui/label"
+import { useNavigate, useLocation } from "react-router-dom"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { CalendarIcon, Users, User, Users2, Home, IndianRupee, Plus, Minus } from "lucide-react"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "../src/components/ui/dialog"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
-export default function App1() {
+interface City {
+  _id: string
+  City: string
+}
+
+export default function PersonalizedTrip() {
   const [startDate, setStartDate] = useState("")
   const [endDate, setEndDate] = useState("")
   const [tripType, setTripType] = useState("")
@@ -23,25 +23,63 @@ export default function App1() {
   const [showModal, setShowModal] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
 
+  const navigate = useNavigate()
+  const location = useLocation()
+  const city = location.state?.city as City | undefined
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!startDate || !endDate || !tripType || !budget) {
       setErrorMessage("Please fill in all the details before submitting.")
       setShowModal(true)
+    } else if (!city) {
+      setErrorMessage("No city selected. Please go back and choose a city.")
+      setShowModal(true)
     } else {
-      console.log({ startDate, endDate, tripType, members, budget })
-      alert("Trip plan submitted!")
+      navigate("/itinerary", { state: { city, tripDetails: { startDate, endDate, tripType, members, budget } } })
     }
   }
 
   const incrementMembers = () => setMembers((prev) => prev + 1)
   const decrementMembers = () => setMembers((prev) => (prev > 2 ? prev - 1 : 2))
 
+  const renderTripTypeButton = (value: string, Icon: any, label: string) => (
+    <Button
+      key={value}
+      type="button"
+      variant={tripType === value ? "default" : "outline"}
+      className={`w-full justify-start py-6 text-lg ${
+        tripType === value ? "bg-green-600 text-white" : "text-green-700 hover:bg-green-50 border-green-300"
+      }`}
+      onClick={() => setTripType(value)}
+    >
+      <Icon className="w-6 h-6 mr-3" />
+      {label}
+    </Button>
+  )
+
+  const renderBudgetButton = (value: string, label: string, icons: number) => (
+    <Button
+      key={value}
+      type="button"
+      variant={budget === value ? "default" : "outline"}
+      className={`w-full justify-start py-6 text-lg ${
+        budget === value ? "bg-green-600 text-white" : "text-green-700 hover:bg-green-50 border-green-300"
+      }`}
+      onClick={() => setBudget(value)}
+    >
+      {[...Array(icons)].map((_, i) => (
+        <IndianRupee key={i} className="w-5 h-5 mr-1" />
+      ))}
+      {label}
+    </Button>
+  )
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-100 to-blue-100 flex items-center justify-center p-4">
       <Card className="w-full max-w-4xl shadow-xl bg-white">
         <CardHeader className="bg-green-600 text-white rounded-t-lg">
-            <CardTitle className="text-3xl font-bold text-center">Plan Your Dream Trip</CardTitle>
+          <CardTitle className="text-3xl font-bold text-center">Plan Your Dream Trip to {city?.City}</CardTitle>
           <CardDescription className="text-green-100 text-lg text-center">
             Fill in the details to start your adventure
           </CardDescription>
@@ -82,27 +120,10 @@ export default function App1() {
             <div className="space-y-3">
               <Label className="text-base font-medium text-green-700">Trip Type</Label>
               <div className="grid grid-cols-2 gap-6">
-                {[
-                  { value: "solo", icon: User, label: "Solo" },
-                  { value: "partner", icon: Users, label: "Partner" },
-                  { value: "friends", icon: Users2, label: "Friends" },
-                  { value: "family", icon: Home, label: "Family" },
-                ].map(({ value, icon: Icon, label }) => (
-                  <Button
-                    key={value}
-                    type="button"
-                    variant={tripType === value ? "default" : "outline"}
-                    className={`w-full justify-start py-6 text-lg ${
-                      tripType === value
-                        ? "bg-green-600 text-white"
-                        : "text-green-700 hover:bg-green-50 border-green-300"
-                    }`}
-                    onClick={() => setTripType(value)}
-                  >
-                    <Icon className="w-6 h-6 mr-3" />
-                    {label}
-                  </Button>
-                ))}
+                {renderTripTypeButton("solo", User, "Solo")}
+                {renderTripTypeButton("partner", Users, "Partner")}
+                {renderTripTypeButton("friends", Users2, "Friends")}
+                {renderTripTypeButton("family", Home, "Family")}
               </div>
             </div>
 
@@ -139,28 +160,9 @@ export default function App1() {
             <div className="space-y-3">
               <Label className="text-base font-medium text-green-700">Budget</Label>
               <div className="grid grid-cols-3 gap-6">
-                {[
-                  { value: "low", label: "Low", icons: 1 },
-                  { value: "medium", label: "Medium", icons: 2 },
-                  { value: "high", label: "High", icons: 3 },
-                ].map(({ value, label, icons }) => (
-                  <Button
-                    key={value}
-                    type="button"
-                    variant={budget === value ? "default" : "outline"}
-                    className={`w-full justify-start py-6 text-lg ${
-                      budget === value
-                        ? "bg-green-600 text-white"
-                        : "text-green-700 hover:bg-green-50 border-green-300"
-                    }`}
-                    onClick={() => setBudget(value)}
-                  >
-                    {[...Array(icons)].map((_, i) => (
-                      <IndianRupee key={i} className="w-5 h-5 mr-1" />
-                    ))}
-                    {label}
-                  </Button>
-                ))}
+                {renderBudgetButton("low", "Low", 1)}
+                {renderBudgetButton("medium", "Medium", 2)}
+                {renderBudgetButton("high", "High", 3)}
               </div>
             </div>
           </form>
@@ -182,7 +184,9 @@ export default function App1() {
             <DialogTitle>Incomplete Details</DialogTitle>
             <DialogDescription>{errorMessage}</DialogDescription>
           </DialogHeader>
-          <Button onClick={() => setShowModal(false)} style={{backgroundColor: "black"}}>Close</Button>
+          <Button onClick={() => setShowModal(false)} className="bg-black text-white">
+            Close
+          </Button>
         </DialogContent>
       </Dialog>
     </div>
