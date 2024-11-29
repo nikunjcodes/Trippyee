@@ -6,11 +6,10 @@ import axios from "axios"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Button } from "@/components/ui/button"
-import { Calendar, MapPin, Download, Star, ArrowLeft, Users, DollarSign, Hotel } from "lucide-react"
+import { Calendar, MapPin, Download, Star, ArrowLeft, Users, DollarSign, Hotel, Cloud } from 'lucide-react'
 import { Badge } from "@/components/ui/badge"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { color } from "framer-motion"
 
 interface Activity {
   name: string
@@ -47,6 +46,16 @@ interface HotelData {
   link: string
 }
 
+interface WeatherData {
+  datetimeStr: string
+  maxt: number
+  mint: number
+  wdir: number
+  uvindex: number
+  preciptype: string
+  conditions: string
+}
+
 export default function ItineraryDisplay() {
   const [itinerary, setItinerary] = useState<ItineraryDay[]>([])
   const [loading, setLoading] = useState(true)
@@ -61,6 +70,10 @@ export default function ItineraryDisplay() {
   const [hotels, setHotels] = useState<HotelData[]>([])
   const [hotelLoading, setHotelLoading] = useState(false)
   const [hotelError, setHotelError] = useState<string | null>(null)
+
+  const [weatherData, setWeatherData] = useState<WeatherData[]>([])
+  const [weatherLoading, setWeatherLoading] = useState(false)
+  const [weatherError, setWeatherError] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchItinerary = async () => {
@@ -143,7 +156,7 @@ export default function ItineraryDisplay() {
         url: `https://tripadvisor-scraper.p.rapidapi.com/hotels/search`,
         params: { query: city.City },
         headers: {
-          'x-rapidapi-key': '10a86fb255msh9bb3fc843ce0a1ep1b889fjsn0b3c40a85deb', // Replace with your actual API key
+          'x-rapidapi-key': 'YOUR_API_KEY',
           'x-rapidapi-host': 'tripadvisor-scraper.p.rapidapi.com'
         }
       }
@@ -156,6 +169,41 @@ export default function ItineraryDisplay() {
     }
 
     setHotelLoading(false)
+  }
+
+  const fetchWeatherData = async () => {
+    if (!city) return
+
+    setWeatherLoading(true)
+    setWeatherError(null)
+
+    const options = {
+      method: 'GET',
+      url: 'https://visual-crossing-weather.p.rapidapi.com/forecast',
+      params: {
+        aggregateHours: '24',
+        location: city.City,
+        contentType: 'json',
+        unitGroup: 'metric',
+        shortColumnNames: 'false'
+      },
+      headers: {
+        'X-RapidAPI-Key': 'YOUR_API_KEY',
+        'X-RapidAPI-Host': 'visual-crossing-weather.p.rapidapi.com'
+      }
+    }
+
+    try {
+      const response = await axios.request(options)
+      const forecastData = response.data.locations[city.City].values
+      setWeatherData(forecastData.slice(0, 7)) // Get forecast for 7 days
+      console.log(forecastData);
+    } catch (error) {
+      console.error('Error fetching weather data:', error)
+      setWeatherError('Failed to fetch weather data')
+    }
+
+    setWeatherLoading(false)
   }
 
   if (loading) {
@@ -227,9 +275,10 @@ export default function ItineraryDisplay() {
             Download Itinerary
           </Button>
           <Tabs defaultValue="itinerary">
-            <TabsList className="grid w-full grid-cols-2 mb-6">
+            <TabsList className="grid w-full grid-cols-3 mb-6">
               <TabsTrigger value="itinerary">Itinerary</TabsTrigger>
               <TabsTrigger value="hotels">Hotels</TabsTrigger>
+              <TabsTrigger value="weather">Weather</TabsTrigger>
             </TabsList>
             <TabsContent value="itinerary">
               <Accordion type="single" collapsible className="w-full space-y-4">
@@ -261,11 +310,11 @@ export default function ItineraryDisplay() {
             <TabsContent value="hotels">
               <Card>
                 <CardHeader>
-                  <CardTitle >Hotels in {city?.City}</CardTitle>
+                  <CardTitle>Hotels in {city?.City}</CardTitle>
                   <CardDescription>Find the perfect place for your stay</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button onClick={searchHotels} disabled={hotelLoading} className="mb-4" style={{color: "black"}}>
+                  <Button onClick={searchHotels} disabled={hotelLoading} className="mb-4">
                     <Hotel className="w-4 h-4 mr-2" />
                     {hotelLoading ? 'Searching...' : 'Search Hotels'}
                   </Button>
@@ -293,6 +342,39 @@ export default function ItineraryDisplay() {
                 </CardContent>
               </Card>
             </TabsContent>
+            <TabsContent value="weather">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Weather in {city?.City}</CardTitle>
+                  <CardDescription>7-day weather forecast for your trip</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button onClick={fetchWeatherData} disabled={weatherLoading} className="mb-4">
+                    <Cloud className="w-4 h-4 mr-2" />
+                    {weatherLoading ? 'Fetching Weather...' : 'Get Weather Forecast'}
+                  </Button>
+                  {weatherError && <p className="text-red-500 mb-4">{weatherError}</p>}
+                  {weatherLoading && <Skeleton className="h-40 w-full" />}
+                  {weatherData.length > 0 && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {weatherData.map((day, index) => (
+                        <Card key={index} className="bg-white shadow-sm">
+                          <CardContent className="p-4">
+                            <p className="font-semibold">{new Date(day.datetimeStr).toLocaleDateString()}</p>
+
+                            <p className="text-2xl font-bold mt-2">{day.maxt}°C / {day.mint}°C</p>
+                            <p className="text-gray-600 mt-1">{day.conditions}</p>
+                          </CardContent>  
+                        </Card>
+                      ))}
+                    </div>
+                  )}
+                  {weatherData.length === 0 && !weatherLoading && (
+                    <p className="text-center text-gray-500">No weather data available. Click the button to fetch the forecast.</p>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
           </Tabs>
         </CardContent>
         <CardFooter className="flex justify-between">
@@ -305,3 +387,4 @@ export default function ItineraryDisplay() {
     </div>
   )
 }
+

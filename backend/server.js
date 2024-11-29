@@ -92,14 +92,16 @@ app.get('/api/places/:cityName', async (req, res) => {
   if (!cityName) return res.status(400).json({ error: "City name parameter is required" });
 
   try {
-    const db = client.db(MONGO_DB);
-    const collection = db.collection(MONGO_COLLECTION);
+    const db = client.db("cities");
+
+    const collection = db.collection("places");
     const places = await collection.find({ City: cityName }).toArray();
     const cleanedPlaces = places.map(place => ({
       ...place,
       Place_Desc: cleanDescription(place.Place_Desc)
     }));
     res.json(cleanedPlaces);
+    console.log(places)
   } catch (error) {
     console.error("Error fetching places:", error);
     res.status(500).json({ error: "An error occurred while fetching places" });
@@ -156,6 +158,30 @@ app.post('/api/match-cities', async (req, res) => {
   } catch (error) {
     console.error("Error matching cities:", error);
     res.status(500).json({ error: "An error occurred while matching cities" });
+  }
+});
+// 5. Submit city
+app.post('/api/submit-city', async (req, res) => {
+  try {
+    const cityData = req.body;
+
+    // Validate required fields (add more validations as needed)
+    if (!cityData.City || !cityData.City_desc) {
+      return res.status(400).json({ error: "City and City description are required." });
+    }
+
+    const db = client.db(MONGO_DB);
+    const collection = db.collection("UserRequestedCities"); // Targeting the specific collection
+
+    const result = await collection.insertOne(cityData);
+
+    res.status(201).json({ 
+      message: "City submitted successfully to UserRequestedCities", 
+      id: result.insertedId 
+    });
+  } catch (error) {
+    console.error("❌ Error submitting city to UserRequestedCities:", error);
+    res.status(500).json({ error: "An error occurred while submitting the city" });
   }
 });
 

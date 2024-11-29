@@ -10,6 +10,8 @@ import PersonalizedTrip from "./components/PersonalizedTrip/PersonalizedTrip.tsx
 import ItenaryDisplay from "./components/ItenaryDisplay/ItenaryDisplay.tsx"
 import MatchingCities from "./components/MatchingCities.tsx"
 import TripPlannerForm from "./components/TripPlannerForm.tsx"
+import TripDetails from "./components/TripDetails.tsx"
+import CitySubmissionForm from "./components/CitySubmissionForm.tsx"
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>    
     
@@ -21,6 +23,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Route path = "/personalized-trip" element = {<><Header /><PersonalizedTrip/></>}/>
       <Route path = "/itinerary" element = {<><Header /><ItenaryDisplay/></>}/>
       <Route path = "/matching-cities" element ={<><Header /> <MatchingCities /></>}/>
+      <Route path ="/trip-details" element={<><Header/> <TripDetails/></>}/>
+      <Route path ="/submit-city" element={<><Header/> <CitySubmissionForm/></>}/>
       </Routes>
     </Router>
 
