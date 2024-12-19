@@ -26,7 +26,7 @@ async function connectToMongo() {
     console.log("Connected to MongoDB");
   } catch (e) {
     console.error("Failed to connect to MongoDB", e);
-    process.exit(1); // Exit if unable to connect
+    process.exit(1); 
   }
 }
 connectToMongo();
@@ -160,12 +160,10 @@ app.post('/api/match-cities', async (req, res) => {
     res.status(500).json({ error: "An error occurred while matching cities" });
   }
 });
-// 5. Submit city
 app.post('/api/submit-city', async (req, res) => {
   try {
     const cityData = req.body;
 
-    // Validate required fields (add more validations as needed)
     if (!cityData.City || !cityData.City_desc) {
       return res.status(400).json({ error: "City and City description are required." });
     }

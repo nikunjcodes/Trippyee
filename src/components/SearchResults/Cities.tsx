@@ -33,7 +33,7 @@
       Distance: string
       Place_Desc: string
     }
-    const UNSPLASH_ACCESS_KEY = "YOUR_API_KEY"; 
+    const UNSPLASH_ACCESS_KEY = "qiw2EaX4VLDBq48BP9We1eIItOzTl2oPTQ-AiAWV8kQ"; 
     const Cities: React.FC = () => {
       const navigate = useNavigate()
       const [cities, setCities] = useState<City[]>([])

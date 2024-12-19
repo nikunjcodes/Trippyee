@@ -26,7 +26,7 @@ const Hero = () => {
           console.error("Error fetching autocomplete suggestions:", error);
         }
       } else {
-        setSuggestions([]); // Clear suggestions when the input is cleared
+        setSuggestions([]); 
       }
     }, 1000);
 

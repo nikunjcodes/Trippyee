@@ -6,7 +6,7 @@ import axios from "axios"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Button } from "@/components/ui/button"
-import { Calendar, MapPin, Download, Star, ArrowLeft, Users, DollarSign, Hotel } from 'lucide-react'
+import { Calendar, MapPin, Download, Star, ArrowLeft, Users, DollarSign, Hotel, Cloud } from 'lucide-react'
 import { Badge } from "@/components/ui/badge"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -56,6 +56,15 @@ interface HotelData {
   thumbnail_url: string
   link: string
 }
+interface WeatherData {
+    datetimeStr: string
+    maxt: number
+    mint: number
+    wdir: number
+    uvindex: number
+    preciptype: string
+    conditions: string
+  }
 
 export default function TripDetails() {
   const [loading, setLoading] = useState(false)
@@ -79,7 +88,9 @@ export default function TripDetails() {
   const [hotels, setHotels] = useState<HotelData[]>([])
   const [hotelLoading, setHotelLoading] = useState(false)
   const [hotelError, setHotelError] = useState<string | null>(null)
-
+  const [weatherData, setWeatherData] = useState<WeatherData[]>([])
+  const [weatherLoading, setWeatherLoading] = useState(false)
+  const [weatherError, setWeatherError] = useState<string | null>(null)
   useEffect(() => {
     if (!city || !selectedPlaces || !estimatedDays) {
       setError("Missing trip information. Please go back and select a city and places to visit.")
@@ -97,7 +108,39 @@ export default function TripDetails() {
   useEffect(() => {
     calculateTotalBudget()
   }, [tripDetails, city])
+  const fetchWeatherData = async () => {
+    if (!city) return
 
+    setWeatherLoading(true)
+    setWeatherError(null)
+
+    const options = {
+      method: 'GET',
+      url: 'https://visual-crossing-weather.p.rapidapi.com/forecast',
+      params: {
+        aggregateHours: '24',
+        location: city.City,
+        contentType: 'json',
+        unitGroup: 'metric',
+        shortColumnNames: 'false'
+      },
+      headers: {
+        'X-RapidAPI-Key': '10a86fb255msh9bb3fc843ce0a1ep1b889fjsn0b3c40a85deb',
+        'X-RapidAPI-Host': 'visual-crossing-weather.p.rapidapi.com'
+      }
+    }
+
+    try {
+      const response = await axios.request(options)
+      const forecastData = response.data.locations[city.City].values
+      setWeatherData(forecastData.slice(0, 7)) // Get forecast for 7 days
+    } catch (error) {
+      console.error('Error fetching weather data:', error)
+      setWeatherError('Failed to fetch weather data')
+    }
+
+    setWeatherLoading(false)
+  }
   const calculateTotalBudget = () => {
     if (!city || !tripDetails.startDate || !tripDetails.endDate) return
 
@@ -121,7 +164,7 @@ export default function TripDetails() {
     setTripDetails(prev => ({ ...prev, [name]: value }))
   }
 
-  const searchHotels = async () => {                    
+  const searchHotels = async () => {
     if (!city) return
 
     setHotelLoading(true)
@@ -133,7 +176,7 @@ export default function TripDetails() {
         url: `https://tripadvisor16.p.rapidapi.com/api/v1/hotels/searchLocation`,
         params: { query: city.City },
         headers: {
-          'x-rapidapi-key': 'YOUR_API_KEY',
+          'x-rapidapi-key': '10a86fb255msh9bb3fc843ce0a1ep1b889fjsn0b3c40a85deb',
           'x-rapidapi-host': 'tripadvisor16.p.rapidapi.com'
         }
       }
@@ -298,7 +341,7 @@ export default function TripDetails() {
               <p><strong>Selected Places:</strong> {selectedPlaces.length}</p>
               <p><strong>Estimated Budget:</strong> ₹{totalBudget.toFixed(2)}</p>
             </div>
-            <Button type="submit" className="w-full text-green-800" disabled={loading}>
+            <Button type="submit" className="w-full bg-black " disabled={loading}>
               {loading ? 'Generating Itinerary...' : 'Generate Itinerary'}
             </Button>
           </form>
@@ -310,9 +353,10 @@ export default function TripDetails() {
                 Download Itinerary
               </Button>
               <Tabs defaultValue="itinerary">
-                <TabsList className="grid w-full grid-cols-2 mb-6">
+                <TabsList className="grid w-full grid-cols-3 mb-6">
                   <TabsTrigger value="itinerary">Itinerary</TabsTrigger>
                   <TabsTrigger value="hotels">Hotels</TabsTrigger>
+                  <TabsTrigger value="weather">Weather</TabsTrigger>
                 </TabsList>
                 <TabsContent value="itinerary">
                   <Accordion type="single" collapsible className="w-full space-y-4">
@@ -376,17 +420,44 @@ export default function TripDetails() {
                     </CardContent>
                   </Card>
                 </TabsContent>
+                <TabsContent value="weather">
+                <Card>
+                    <CardHeader>
+                      <CardTitle>Weather in {city?.City}</CardTitle>
+                      <CardDescription>7-day weather forecast for your trip</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <Button onClick={fetchWeatherData} disabled={weatherLoading} className="mb-4 bg-black">
+                        <Cloud className="w-4 h-4 mr-2" />
+                        {weatherLoading ? 'Fetching Weather...' : 'Get Weather Forecast'}
+                      </Button>
+                      {weatherError && <p className="text-red-500 mb-4">{weatherError}</p>}
+                      {weatherLoading && <Skeleton className="h-40 w-full" />}
+                      {weatherData.length > 0 && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                          {weatherData.map((day, index) => (
+                            <Card key={index} className="bg-white shadow-sm">
+                              <CardContent className="p-4">
+                                <p className="font-semibold">{new Date(day.datetimeStr).toLocaleDateString()}</p>
+                                <p className="text-2xl font-bold mt-2">{day.maxt}°C / {day.mint}°C</p>
+                                <p className="text-gray-600 mt-1">{day.conditions}</p>
+                              </CardContent>
+                            </Card>
+                          ))}
+                        </div>
+                      )}
+                      {weatherData.length === 0 && !weatherLoading && (
+                        <p className="text-center text-gray-500">No weather data available. Click the button to fetch the forecast.</p>
+                      )}
+                    </CardContent>
+                  </Card>
+                </TabsContent>
               </Tabs>
             </div>
           )}
         </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button onClick={() => navigate(-1)} variant="outline">
-            <ArrowLeft className="mr-2" />
-            Go Back
-          </Button>
-        </CardFooter>
       </Card>
+
     </div>
   )
 }

@@ -156,7 +156,7 @@ export default function ItineraryDisplay() {
         url: `https://tripadvisor-scraper.p.rapidapi.com/hotels/search`,
         params: { query: city.City },
         headers: {
-          'x-rapidapi-key': 'YOUR_API_KEY',
+          'x-rapidapi-key': '10a86fb255msh9bb3fc843ce0a1ep1b889fjsn0b3c40a85deb',
           'x-rapidapi-host': 'tripadvisor-scraper.p.rapidapi.com'
         }
       }
@@ -188,7 +188,7 @@ export default function ItineraryDisplay() {
         shortColumnNames: 'false'
       },
       headers: {
-        'X-RapidAPI-Key': 'YOUR_API_KEY',
+        'X-RapidAPI-Key': '10a86fb255msh9bb3fc843ce0a1ep1b889fjsn0b3c40a85deb',
         'X-RapidAPI-Host': 'visual-crossing-weather.p.rapidapi.com'
       }
     }
@@ -314,7 +314,7 @@ export default function ItineraryDisplay() {
                   <CardDescription>Find the perfect place for your stay</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button onClick={searchHotels} disabled={hotelLoading} className="mb-4">
+                  <Button onClick={searchHotels} disabled={hotelLoading} className="mb-4 bg-black">
                     <Hotel className="w-4 h-4 mr-2" />
                     {hotelLoading ? 'Searching...' : 'Search Hotels'}
                   </Button>
@@ -349,8 +349,8 @@ export default function ItineraryDisplay() {
                   <CardDescription>7-day weather forecast for your trip</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button onClick={fetchWeatherData} disabled={weatherLoading} className="mb-4">
-                    <Cloud className="w-4 h-4 mr-2" />
+                  <Button onClick={fetchWeatherData} disabled={weatherLoading} className="mb-4 bg-black">
+                    <Cloud className="w-4 h-4 mr-2 " />
                     {weatherLoading ? 'Fetching Weather...' : 'Get Weather Forecast'}
                   </Button>
                   {weatherError && <p className="text-red-500 mb-4">{weatherError}</p>}
