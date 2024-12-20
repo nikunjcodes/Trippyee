@@ -1,9 +1,15 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,20 +20,22 @@ const CitySubmissionForm: React.FC = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    City: '',
-    City_desc: '',
-    Min_no_of_days: '',
-    Max_no_of_days: '',
-    Low_Budget_Per_Day: '',
-    Medium_Budget_Per_Day: '',
-    High_Budget_Per_Day: '',
-    Ideal_duration: '',
-    Best_time_to_visit: '',
+    City: "",
+    City_desc: "",
+    Min_no_of_days: "",
+    Max_no_of_days: "",
+    Low_Budget_Per_Day: "",
+    Medium_Budget_Per_Day: "",
+    High_Budget_Per_Day: "",
+    Ideal_duration: "",
+    Best_time_to_visit: "",
   });
 
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -37,29 +45,33 @@ const CitySubmissionForm: React.FC = () => {
     setLoading(true);
 
     try {
-      await axios.post('http://localhost:5000/api/submit-city', formData);
+      await axios.post(
+        "https://trippyee.onrender.com/api/submit-city",
+        formData
+      );
       toast({
         title: "City Submitted",
         description: "Your submission has been recorded successfully.",
       });
       setLoading(false);
       setFormData({
-        City: '',
-        City_desc: '',
-        Min_no_of_days: '',
-        Max_no_of_days: '',
-        Low_Budget_Per_Day: '',
-        Medium_Budget_Per_Day: '',
-        High_Budget_Per_Day: '',
-        Ideal_duration: '',
-        Best_time_to_visit: '',
+        City: "",
+        City_desc: "",
+        Min_no_of_days: "",
+        Max_no_of_days: "",
+        Low_Budget_Per_Day: "",
+        Medium_Budget_Per_Day: "",
+        High_Budget_Per_Day: "",
+        Ideal_duration: "",
+        Best_time_to_visit: "",
       });
-      navigate('/'); // Redirect to the home page or another route after submission
+      navigate("/"); // Redirect to the home page or another route after submission
     } catch (error) {
       console.error("Error submitting city:", error);
       toast({
         title: "Submission Failed",
-        description: "There was an error while submitting the city. Please try again later.",
+        description:
+          "There was an error while submitting the city. Please try again later.",
         variant: "destructive",
       });
       setLoading(false);
@@ -71,7 +83,9 @@ const CitySubmissionForm: React.FC = () => {
       <Card className="w-full max-w-lg shadow-lg">
         <CardHeader>
           <CardTitle>Submit a City</CardTitle>
-          <CardDescription>Provide city details for review and consideration.</CardDescription>
+          <CardDescription>
+            Provide city details for review and consideration.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit}>
@@ -143,7 +157,9 @@ const CitySubmissionForm: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="Medium_Budget_Per_Day">Medium Budget Per Day</Label>
+                  <Label htmlFor="Medium_Budget_Per_Day">
+                    Medium Budget Per Day
+                  </Label>
                   <Input
                     id="Medium_Budget_Per_Day"
                     name="Medium_Budget_Per_Day"
@@ -154,7 +170,9 @@ const CitySubmissionForm: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="High_Budget_Per_Day">High Budget Per Day</Label>
+                  <Label htmlFor="High_Budget_Per_Day">
+                    High Budget Per Day
+                  </Label>
                   <Input
                     id="High_Budget_Per_Day"
                     name="High_Budget_Per_Day"

@@ -4,7 +4,7 @@ import CountUp from "react-countup";
 import { color, motion, px } from "framer-motion";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import './Hero.css';
+import "./Hero.css";
 
 const Hero = () => {
   const [query, setQuery] = useState("");
@@ -19,14 +19,16 @@ const Hero = () => {
     const delayDebounceFn = setTimeout(async () => {
       if (query) {
         try {
-          const response = await axios.get(`http://localhost:5000/api/autocomplete?q=${query}`);
+          const response = await axios.get(
+            `https://trippyee.onrender.com/api/autocomplete?q=${query}`
+          );
           console.log(response.data);
           setSuggestions(response.data);
         } catch (error) {
           console.error("Error fetching autocomplete suggestions:", error);
         }
       } else {
-        setSuggestions([]); 
+        setSuggestions([]);
       }
     }, 1000);
 
@@ -44,45 +46,45 @@ const Hero = () => {
               transition={{ duration: 2, type: "ease-in" }}
             >
               Let's Discover <br />
-              The World 
+              The World
               <br /> Together
             </motion.h1>
           </div>
-        
+
           <div className="flexColStart hero-desc">
-            <h1> Plan your trip with AI</h1>  
-            <span className="secondaryText">Plan your whole trip by simply typing your destination</span>
+            <h1> Plan your trip with AI</h1>
+            <span className="secondaryText">
+              Plan your whole trip by simply typing your destination
+            </span>
           </div>
           <div className="flexCenter search-bar">
-          <HiLocationMarker color="var(--blue)" size={25} />
-  <input
-    type="text"
-    value={query}
-    onChange={(e) => setQuery(e.target.value)}
-    placeholder="Enter location you want to visit"
-    style={{ color: "black", width: "250px" }}
-    
-  />
+            <HiLocationMarker color="var(--blue)" size={25} />
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Enter location you want to visit"
+              style={{ color: "black", width: "250px" }}
+            />
 
-  {suggestions.length > 0 && (
-    <ul className="suggestions-list" style={{color: "GrayText"}}>
-      {suggestions.map((suggestion, index) => (
-        <li 
-          key={index} 
-          className="suggestion-item"
-          onClick={() => setQuery(suggestion)}
-        >
-          {suggestion}
-        </li>
-      ))}
-    </ul>
-  )}
+            {suggestions.length > 0 && (
+              <ul className="suggestions-list" style={{ color: "GrayText" }}>
+                {suggestions.map((suggestion, index) => (
+                  <li
+                    key={index}
+                    className="suggestion-item"
+                    onClick={() => setQuery(suggestion)}
+                  >
+                    {suggestion}
+                  </li>
+                ))}
+              </ul>
+            )}
 
-  <button className="button" onClick={handleSearchClick}>
-    Search
-  </button>
-</div>
-
+            <button className="button" onClick={handleSearchClick}>
+              Search
+            </button>
+          </div>
 
           <div className="flexCenter stats">
             <div className="flexColCenter stat">

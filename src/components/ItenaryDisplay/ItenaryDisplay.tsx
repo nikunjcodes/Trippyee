@@ -1,217 +1,260 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from "react"
-import { useLocation, useNavigate } from "react-router-dom"
-import axios from "axios"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Button } from "@/components/ui/button"
-import { Calendar, MapPin, Download, Star, ArrowLeft, Users, DollarSign, Hotel, Cloud } from 'lucide-react'
-import { Badge } from "@/components/ui/badge"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardFooter,
+} from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import {
+  Calendar,
+  MapPin,
+  Download,
+  Star,
+  ArrowLeft,
+  Users,
+  DollarSign,
+  Hotel,
+  Cloud,
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface Activity {
-  name: string
-  description: string
-  rating: number
-  distance: string
+  name: string;
+  description: string;
+  rating: number;
+  distance: string;
 }
 
 interface ItineraryDay {
-  day: number
-  activities: Activity[]
+  day: number;
+  activities: Activity[];
 }
 
 interface City {
-  _id: string
-  City: string
-  Low_Budget_Per_Day: number
-  Medium_Budget_Per_Day: number
-  High_Budget_Per_Day: number
+  _id: string;
+  City: string;
+  Low_Budget_Per_Day: number;
+  Medium_Budget_Per_Day: number;
+  High_Budget_Per_Day: number;
 }
 
 interface TripDetails {
-  startDate: string
-  endDate: string
-  tripType: string
-  members: number
-  budget: 'low' | 'medium' | 'high'
+  startDate: string;
+  endDate: string;
+  tripType: string;
+  members: number;
+  budget: "low" | "medium" | "high";
 }
 
 interface HotelData {
-  name: string
-  type: string
-  thumbnail_url: string
-  link: string
+  name: string;
+  type: string;
+  thumbnail_url: string;
+  link: string;
 }
 
 interface WeatherData {
-  datetimeStr: string
-  maxt: number
-  mint: number
-  wdir: number
-  uvindex: number
-  preciptype: string
-  conditions: string
+  datetimeStr: string;
+  maxt: number;
+  mint: number;
+  wdir: number;
+  uvindex: number;
+  preciptype: string;
+  conditions: string;
 }
 
 export default function ItineraryDisplay() {
-  const [itinerary, setItinerary] = useState<ItineraryDay[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const location = useLocation()
-  const navigate = useNavigate()
-  const city = location.state?.city as City | undefined
-  const tripDetails = location.state?.tripDetails as TripDetails | undefined
+  const [itinerary, setItinerary] = useState<ItineraryDay[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const city = location.state?.city as City | undefined;
+  const tripDetails = location.state?.tripDetails as TripDetails | undefined;
 
-  const [totalBudget, setTotalBudget] = useState(0)
+  const [totalBudget, setTotalBudget] = useState(0);
 
-  const [hotels, setHotels] = useState<HotelData[]>([])
-  const [hotelLoading, setHotelLoading] = useState(false)
-  const [hotelError, setHotelError] = useState<string | null>(null)
+  const [hotels, setHotels] = useState<HotelData[]>([]);
+  const [hotelLoading, setHotelLoading] = useState(false);
+  const [hotelError, setHotelError] = useState<string | null>(null);
 
-  const [weatherData, setWeatherData] = useState<WeatherData[]>([])
-  const [weatherLoading, setWeatherLoading] = useState(false)
-  const [weatherError, setWeatherError] = useState<string | null>(null)
+  const [weatherData, setWeatherData] = useState<WeatherData[]>([]);
+  const [weatherLoading, setWeatherLoading] = useState(false);
+  const [weatherError, setWeatherError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchItinerary = async () => {
       if (!city || !tripDetails) {
-        setError("No city or trip details found. Please go back and fill in all the information.")
-        setLoading(false)
-        return
+        setError(
+          "No city or trip details found. Please go back and fill in all the information."
+        );
+        setLoading(false);
+        return;
       }
 
       try {
-        const response = await axios.post<ItineraryDay[]>('http://localhost:5000/api/itinerary', {
-          cityName: city.City,
-          tripDetails
-        })
-        setItinerary(response.data)
+        const response = await axios.post<ItineraryDay[]>(
+          "https://trippyee.onrender.com/api/itinerary",
+          {
+            cityName: city.City,
+            tripDetails,
+          }
+        );
+        setItinerary(response.data);
 
-        const budgetPerDay = 
-          tripDetails.budget === 'low' ? city.Low_Budget_Per_Day :
-          tripDetails.budget === 'medium' ? city.Medium_Budget_Per_Day :
-          city.High_Budget_Per_Day
+        const budgetPerDay =
+          tripDetails.budget === "low"
+            ? city.Low_Budget_Per_Day
+            : tripDetails.budget === "medium"
+            ? city.Medium_Budget_Per_Day
+            : city.High_Budget_Per_Day;
 
-        const tripDuration = Math.ceil((new Date(tripDetails.endDate).getTime() - new Date(tripDetails.startDate).getTime()) / (1000 * 3600 * 24))
-        const calculatedTotalBudget = budgetPerDay * tripDetails.members * tripDuration
+        const tripDuration = Math.ceil(
+          (new Date(tripDetails.endDate).getTime() -
+            new Date(tripDetails.startDate).getTime()) /
+            (1000 * 3600 * 24)
+        );
+        const calculatedTotalBudget =
+          budgetPerDay * tripDetails.members * tripDuration;
 
-        setTotalBudget(calculatedTotalBudget)
-        setLoading(false)
+        setTotalBudget(calculatedTotalBudget);
+        setLoading(false);
       } catch (err) {
-        setError("Failed to generate itinerary. Please try again.")
-        setLoading(false)
+        setError("Failed to generate itinerary. Please try again.");
+        setLoading(false);
       }
-    }
+    };
 
-    fetchItinerary()
-  }, [city, tripDetails])
+    fetchItinerary();
+  }, [city, tripDetails]);
 
   const downloadItinerary = () => {
-    const itineraryText = generateItineraryText()
-    const blob = new Blob([itineraryText], { type: 'text/plain' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `${city?.City}_Itinerary.txt`
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
-  }
+    const itineraryText = generateItineraryText();
+    const blob = new Blob([itineraryText], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${city?.City}_Itinerary.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
 
   const generateItineraryText = () => {
-    let text = `Itinerary for ${city?.City}\n`
-    text += `Trip Dates: ${new Date(tripDetails?.startDate || '').toLocaleDateString()} - ${new Date(tripDetails?.endDate || '').toLocaleDateString()}\n`
-    text += `Number of Members: ${tripDetails?.members}\n`
-    text += `Budget Level: ${tripDetails?.budget}\n`
-    text += `Estimated Total Budget: ₹${totalBudget.toFixed(2)}\n\n`
+    let text = `Itinerary for ${city?.City}\n`;
+    text += `Trip Dates: ${new Date(
+      tripDetails?.startDate || ""
+    ).toLocaleDateString()} - ${new Date(
+      tripDetails?.endDate || ""
+    ).toLocaleDateString()}\n`;
+    text += `Number of Members: ${tripDetails?.members}\n`;
+    text += `Budget Level: ${tripDetails?.budget}\n`;
+    text += `Estimated Total Budget: ₹${totalBudget.toFixed(2)}\n\n`;
 
     itinerary.forEach((day) => {
-      text += `Day ${day.day}:\n`
+      text += `Day ${day.day}:\n`;
       day.activities.forEach((activity) => {
-        text += `- ${activity.name}\n`
-        text += `  Description: ${activity.description}\n`
-        text += `  Rating: ${activity.rating !== undefined ? activity.rating.toFixed(1) : 'N/A'} stars\n`
-        text += `  Distance: ${activity.distance}\n`
-        text += `\n`
-      })
-      text += '\n'
-    })
+        text += `- ${activity.name}\n`;
+        text += `  Description: ${activity.description}\n`;
+        text += `  Rating: ${
+          activity.rating !== undefined ? activity.rating.toFixed(1) : "N/A"
+        } stars\n`;
+        text += `  Distance: ${activity.distance}\n`;
+        text += `\n`;
+      });
+      text += "\n";
+    });
 
-    return text
-  }
+    return text;
+  };
 
   const searchHotels = async () => {
-    if (!city) return
+    if (!city) return;
 
-    setHotelLoading(true)
-    setHotelError(null)
+    setHotelLoading(true);
+    setHotelError(null);
 
     try {
       const options = {
-        method: 'GET',
+        method: "GET",
         url: `https://tripadvisor-scraper.p.rapidapi.com/hotels/search`,
         params: { query: city.City },
         headers: {
-          'x-rapidapi-key': '10a86fb255msh9bb3fc843ce0a1ep1b889fjsn0b3c40a85deb',
-          'x-rapidapi-host': 'tripadvisor-scraper.p.rapidapi.com'
-        }
-      }
+          "x-rapidapi-key":
+            "10a86fb255msh9bb3fc843ce0a1ep1b889fjsn0b3c40a85deb",
+          "x-rapidapi-host": "tripadvisor-scraper.p.rapidapi.com",
+        },
+      };
 
-      const response = await axios.request(options)
-      setHotels(response.data)
+      const response = await axios.request(options);
+      setHotels(response.data);
     } catch (err) {
-      console.error('Error fetching hotels:', err)
-      setHotelError('Failed to fetch hotel data')
+      console.error("Error fetching hotels:", err);
+      setHotelError("Failed to fetch hotel data");
     }
 
-    setHotelLoading(false)
-  }
+    setHotelLoading(false);
+  };
 
   const fetchWeatherData = async () => {
-    if (!city) return
+    if (!city) return;
 
-    setWeatherLoading(true)
-    setWeatherError(null)
+    setWeatherLoading(true);
+    setWeatherError(null);
 
     const options = {
-      method: 'GET',
-      url: 'https://visual-crossing-weather.p.rapidapi.com/forecast',
+      method: "GET",
+      url: "https://visual-crossing-weather.p.rapidapi.com/forecast",
       params: {
-        aggregateHours: '24',
+        aggregateHours: "24",
         location: city.City,
-        contentType: 'json',
-        unitGroup: 'metric',
-        shortColumnNames: 'false'
+        contentType: "json",
+        unitGroup: "metric",
+        shortColumnNames: "false",
       },
       headers: {
-        'X-RapidAPI-Key': '10a86fb255msh9bb3fc843ce0a1ep1b889fjsn0b3c40a85deb',
-        'X-RapidAPI-Host': 'visual-crossing-weather.p.rapidapi.com'
-      }
-    }
+        "X-RapidAPI-Key": "10a86fb255msh9bb3fc843ce0a1ep1b889fjsn0b3c40a85deb",
+        "X-RapidAPI-Host": "visual-crossing-weather.p.rapidapi.com",
+      },
+    };
 
     try {
-      const response = await axios.request(options)
-      const forecastData = response.data.locations[city.City].values
-      setWeatherData(forecastData.slice(0, 7)) // Get forecast for 7 days
+      const response = await axios.request(options);
+      const forecastData = response.data.locations[city.City].values;
+      setWeatherData(forecastData.slice(0, 7)); // Get forecast for 7 days
       console.log(forecastData);
     } catch (error) {
-      console.error('Error fetching weather data:', error)
-      setWeatherError('Failed to fetch weather data')
+      console.error("Error fetching weather data:", error);
+      setWeatherError("Failed to fetch weather data");
     }
 
-    setWeatherLoading(false)
-  }
+    setWeatherLoading(false);
+  };
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-green-100 to-blue-100 p-8">
         <Card className="max-w-4xl mx-auto">
           <CardHeader>
-            <CardTitle className="text-2xl font-bold text-green-800">Generating Your Itinerary...</CardTitle>
+            <CardTitle className="text-2xl font-bold text-green-800">
+              Generating Your Itinerary...
+            </CardTitle>
           </CardHeader>
           <CardContent>
             {[...Array(3)].map((_, index) => (
@@ -223,7 +266,7 @@ export default function ItineraryDisplay() {
           </CardContent>
         </Card>
       </div>
-    )
+    );
   }
 
   if (error) {
@@ -231,15 +274,19 @@ export default function ItineraryDisplay() {
       <div className="min-h-screen bg-gradient-to-br from-green-100 to-blue-100 flex items-center justify-center">
         <Card className="max-w-md w-full">
           <CardHeader>
-            <CardTitle className="text-2xl font-bold text-red-600">Error</CardTitle>
+            <CardTitle className="text-2xl font-bold text-red-600">
+              Error
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-gray-700 mb-4">{error}</p>
-            <Button onClick={() => navigate(-1)} className="w-full">Go Back</Button>
+            <Button onClick={() => navigate(-1)} className="w-full">
+              Go Back
+            </Button>
           </CardContent>
         </Card>
       </div>
-    )
+    );
   }
 
   return (
@@ -248,29 +295,48 @@ export default function ItineraryDisplay() {
         <CardHeader className="bg-gradient-to-r from-green-600 to-blue-600 text-white">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
             <div>
-              <CardTitle className="text-3xl font-bold">Your Trip to {city?.City}</CardTitle>
+              <CardTitle className="text-3xl font-bold">
+                Your Trip to {city?.City}
+              </CardTitle>
               <CardDescription className="text-green-100 mt-2">
                 <div className="flex items-center">
                   <Calendar className="w-5 h-5 mr-2" />
-                  <span>{new Date(tripDetails?.startDate || '').toLocaleDateString()} - {new Date(tripDetails?.endDate || '').toLocaleDateString()}</span>
+                  <span>
+                    {new Date(
+                      tripDetails?.startDate || ""
+                    ).toLocaleDateString()}{" "}
+                    -{" "}
+                    {new Date(tripDetails?.endDate || "").toLocaleDateString()}
+                  </span>
                 </div>
                 <div className="flex items-center mt-1">
                   <Users className="w-5 h-5 mr-2" />
-                  <span>{tripDetails?.members} {tripDetails?.members === 1 ? 'Person' : 'People'}</span>
+                  <span>
+                    {tripDetails?.members}{" "}
+                    {tripDetails?.members === 1 ? "Person" : "People"}
+                  </span>
                 </div>
               </CardDescription>
             </div>
             <div className="text-right mt-4 md:mt-0">
               <span className="text-xl font-semibold">Total Budget</span>
-              <div className="text-4xl font-bold text-yellow-300">₹{totalBudget.toFixed(2)}</div>
+              <div className="text-4xl font-bold text-yellow-300">
+                ₹{totalBudget.toFixed(2)}
+              </div>
               <Badge variant="secondary" className="mt-1">
-                {tripDetails?.budget.charAt(0).toUpperCase() + tripDetails?.budget.slice(1)} Budget <br></br>(excluding travel)
+                {tripDetails?.budget.charAt(0).toUpperCase() +
+                  tripDetails?.budget.slice(1)}{" "}
+                Budget <br></br>(excluding travel)
               </Badge>
             </div>
           </div>
         </CardHeader>
         <CardContent className="p-6">
-          <Button onClick={downloadItinerary} className="mb-6 w-full sm:w-auto" variant="outline">
+          <Button
+            onClick={downloadItinerary}
+            className="mb-6 w-full sm:w-auto"
+            variant="outline"
+          >
             <Download className="mr-2" />
             Download Itinerary
           </Button>
@@ -283,19 +349,35 @@ export default function ItineraryDisplay() {
             <TabsContent value="itinerary">
               <Accordion type="single" collapsible className="w-full space-y-4">
                 {itinerary.map((day) => (
-                  <AccordionItem key={day.day} value={`day-${day.day}`} className="border rounded-lg overflow-hidden">
+                  <AccordionItem
+                    key={day.day}
+                    value={`day-${day.day}`}
+                    className="border rounded-lg overflow-hidden"
+                  >
                     <AccordionTrigger className="text-xl font-semibold text-green-800 p-4 hover:bg-green-50">
                       Day {day.day}
                     </AccordionTrigger>
                     <AccordionContent className="p-4 bg-white">
                       <ul className="space-y-4">
                         {day.activities.map((activity, index) => (
-                          <li key={index} className="border-b pb-4 last:border-b-0 last:pb-0">
-                            <h3 className="font-bold text-lg text-green-700">{activity.name}</h3>
-                            <p className="text-gray-600 mt-1">{activity.description}</p>
+                          <li
+                            key={index}
+                            className="border-b pb-4 last:border-b-0 last:pb-0"
+                          >
+                            <h3 className="font-bold text-lg text-green-700">
+                              {activity.name}
+                            </h3>
+                            <p className="text-gray-600 mt-1">
+                              {activity.description}
+                            </p>
                             <div className="flex items-center mt-2 text-sm text-gray-500">
                               <Star className="w-4 h-4 text-yellow-400 mr-1" />
-                              <span>{activity.rating ? activity.rating.toFixed(1) : '4.0'} stars</span>
+                              <span>
+                                {activity.rating
+                                  ? activity.rating.toFixed(1)
+                                  : "4.0"}{" "}
+                                stars
+                              </span>
                               <MapPin className="w-4 h-4 text-blue-500 ml-4 mr-1" />
                               <span>{activity.distance}</span>
                             </div>
@@ -311,24 +393,44 @@ export default function ItineraryDisplay() {
               <Card>
                 <CardHeader>
                   <CardTitle>Hotels in {city?.City}</CardTitle>
-                  <CardDescription>Find the perfect place for your stay</CardDescription>
+                  <CardDescription>
+                    Find the perfect place for your stay
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button onClick={searchHotels} disabled={hotelLoading} className="mb-4 bg-black">
+                  <Button
+                    onClick={searchHotels}
+                    disabled={hotelLoading}
+                    className="mb-4 bg-black"
+                  >
                     <Hotel className="w-4 h-4 mr-2" />
-                    {hotelLoading ? 'Searching...' : 'Search Hotels'}
+                    {hotelLoading ? "Searching..." : "Search Hotels"}
                   </Button>
-                  {hotelError && <p className="text-red-500 mb-4">{hotelError}</p>}
+                  {hotelError && (
+                    <p className="text-red-500 mb-4">{hotelError}</p>
+                  )}
                   {hotelLoading && <Skeleton className="h-40 w-full" />}
                   {hotels.length > 0 && (
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {hotels.map((hotel) => (
-                        <li key={hotel.link} className="border rounded-lg overflow-hidden">
-                          <img src={hotel.thumbnail_url} alt={hotel.name} className="w-full h-40 object-cover" />
+                        <li
+                          key={hotel.link}
+                          className="border rounded-lg overflow-hidden"
+                        >
+                          <img
+                            src={hotel.thumbnail_url}
+                            alt={hotel.name}
+                            className="w-full h-40 object-cover"
+                          />
                           <div className="p-4">
                             <h3 className="font-bold text-lg">{hotel.name}</h3>
                             <p className="text-gray-600">{hotel.type}</p>
-                            <a href={hotel.link} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block">
+                            <a
+                              href={hotel.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="mt-2 inline-block"
+                            >
                               <Button variant="outline">View Details</Button>
                             </a>
                           </div>
@@ -337,7 +439,9 @@ export default function ItineraryDisplay() {
                     </ul>
                   )}
                   {hotels.length === 0 && !hotelLoading && (
-                    <p className="text-center text-gray-500">No hotels found. Try searching to see available options.</p>
+                    <p className="text-center text-gray-500">
+                      No hotels found. Try searching to see available options.
+                    </p>
                   )}
                 </CardContent>
               </Card>
@@ -346,31 +450,50 @@ export default function ItineraryDisplay() {
               <Card>
                 <CardHeader>
                   <CardTitle>Weather in {city?.City}</CardTitle>
-                  <CardDescription>7-day weather forecast for your trip</CardDescription>
+                  <CardDescription>
+                    7-day weather forecast for your trip
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button onClick={fetchWeatherData} disabled={weatherLoading} className="mb-4 bg-black">
+                  <Button
+                    onClick={fetchWeatherData}
+                    disabled={weatherLoading}
+                    className="mb-4 bg-black"
+                  >
                     <Cloud className="w-4 h-4 mr-2 " />
-                    {weatherLoading ? 'Fetching Weather...' : 'Get Weather Forecast'}
+                    {weatherLoading
+                      ? "Fetching Weather..."
+                      : "Get Weather Forecast"}
                   </Button>
-                  {weatherError && <p className="text-red-500 mb-4">{weatherError}</p>}
+                  {weatherError && (
+                    <p className="text-red-500 mb-4">{weatherError}</p>
+                  )}
                   {weatherLoading && <Skeleton className="h-40 w-full" />}
                   {weatherData.length > 0 && (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       {weatherData.map((day, index) => (
                         <Card key={index} className="bg-white shadow-sm">
                           <CardContent className="p-4">
-                            <p className="font-semibold">{new Date(day.datetimeStr).toLocaleDateString()}</p>
+                            <p className="font-semibold">
+                              {new Date(day.datetimeStr).toLocaleDateString()}
+                            </p>
 
-                            <p className="text-2xl font-bold mt-2">{day.maxt}°C / {day.mint}°C</p>
-                            <p className="text-gray-600 mt-1">{day.conditions}</p>
-                          </CardContent>  
+                            <p className="text-2xl font-bold mt-2">
+                              {day.maxt}°C / {day.mint}°C
+                            </p>
+                            <p className="text-gray-600 mt-1">
+                              {day.conditions}
+                            </p>
+                          </CardContent>
                         </Card>
                       ))}
                     </div>
                   )}
                   {weatherData.length === 0 && !weatherLoading && (
-                    <p className="text-center text-gray-500">No weather data available. Click the button to fetch the forecast.</p>
+                    <p className="text-center text-gray-500">
+                      No weather data available. Click the button to fetch the
+                      forecast.
+                    </p>
                   )}
                 </CardContent>
               </Card>
@@ -385,6 +508,5 @@ export default function ItineraryDisplay() {
         </CardFooter>
       </Card>
     </div>
-  )
+  );
 }
-
